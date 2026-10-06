@@ -1,0 +1,333 @@
+# ============================================================================
+# RelateIQ — Cortex Analyst semantic model (Snowflake YAML format)
+# Semantic model name: relateiq_model
+# Source: RELATEIQ_DEMO.OPS (built by 01_schema.sql / loaded by 02_load.py)
+# Anchor date ("today"): 2026-10-06. Currency: INR.
+# ============================================================================
+name: relateiq_model
+description: >
+  Customer 360 and Next Best Action data for RelateIQ, a digital lender's
+  retail borrower book (40 customers). Powers the Relationship Manager's
+  morning questions: who needs attention today, who are the top upsell
+  candidates, which disputes are open, and delinquency by segment.
+
+tables:
+  # --------------------------------------------------------------------------
+  - name: customers
+    description: One row per retail borrower with risk and value attributes.
+    base_table:
+      database: RELATEIQ_DEMO
+      schema: OPS
+      table: CUSTOMERS
+    primary_key:
+      name: customer_id
+    dimensions:
+      - name: customer_id
+        expr: customer_id
+        data_type: TEXT
+        unique: true
+        description: Customer key, CUST-001 ... CUST-040.
+      - name: name
+        expr: name
+        data_type: TEXT
+        description: Customer full name.
+      - name: segment
+        expr: segment
+        data_type: TEXT
+        sample_values: ["Salaried", "Self-Employed", "Small Business"]
+        description: Employment segment.
+      - name: region
+        expr: region
+        data_type: TEXT
+        sample_values: ["Mumbai", "Delhi NCR", "Bengaluru", "Chennai", "Pune", "Hyderabad"]
+        description: Customer region/city.
+      - name: behavior_profile
+        expr: behavior_profile
+        data_type: TEXT
+        sample_values: ["loyal", "at-risk", "delinquent", "new", "dormant", "high-value"]
+        description: Behavioral cohort label.
+      - name: credit_score
+        expr: credit_score
+        data_type: NUMBER
+        description: Credit score, 580..820.
+      - name: utilization_pct
+        expr: utilization_pct
+        data_type: NUMBER
+        description: Credit utilization percent, 5..98.
+      - name: tenure_months
+        expr: tenure_months
+        data_type: NUMBER
+        description: Tenure with the lender in months.
+      - name: missed_payments_12m
+        expr: missed_payments_12m
+        data_type: NUMBER
+        description: Missed payments in the last 12 months, 0..8.
+      - name: avg_days_late
+        expr: avg_days_late
+        data_type: NUMBER
+        description: Average days past due, 0..45.
+      - name: products_held
+        expr: products_held
+        data_type: NUMBER
+        description: Number of products held, 1..4.
+      - name: lifetime_value
+        expr: lifetime_value
+        data_type: NUMBER
+        description: Customer lifetime value in INR.
+    measures:
+      - name: customer_count
+        expr: customer_id
+        agg: COUNT_DISTINCT
+        description: Number of distinct customers.
+      - name: avg_credit_score
+        expr: credit_score
+        agg: AVG
+        description: Average credit score.
+      - name: avg_utilization_pct
+        expr: utilization_pct
+        agg: AVG
+        description: Average credit utilization percent.
+      - name: total_lifetime_value
+        expr: lifetime_value
+        agg: SUM
+        description: Total lifetime value in INR.
+      - name: total_missed_payments_12m
+        expr: missed_payments_12m
+        agg: SUM
+        description: Total missed payments in the last 12 months.
+
+  # --------------------------------------------------------------------------
+  - name: accounts
+    description: Loan/credit accounts held by customers (1-3 per customer).
+    base_table:
+      database: RELATEIQ_DEMO
+      schema: OPS
+      table: ACCOUNTS
+    primary_key:
+      name: account_id
+    dimensions:
+      - name: account_id
+        expr: account_id
+        data_type: TEXT
+        unique: true
+      - name: customer_id
+        expr: customer_id
+        data_type: TEXT
+        description: Owning customer key.
+      - name: product_type
+        expr: product_type
+        data_type: TEXT
+        sample_values: ["Personal Loan", "Credit Card", "BNPL", "Two-wheeler Loan", "Gold Loan"]
+      - name: status
+        expr: status
+        data_type: TEXT
+        sample_values: ["Active", "Delinquent", "Closed"]
+      - name: opened_date
+        expr: opened_date
+        data_type: DATE
+    measures:
+      - name: account_count
+        expr: account_id
+        agg: COUNT_DISTINCT
+        description: Number of distinct accounts.
+      - name: total_outstanding
+        expr: outstanding
+        agg: SUM
+        description: Total outstanding balance in INR.
+      - name: total_sanctioned_limit
+        expr: sanctioned_limit
+        agg: SUM
+        description: Total sanctioned limit in INR.
+      - name: delinquent_account_count
+        expr: account_id
+        agg: COUNT
+        filters:
+          - name: is_delinquent
+            expr: status = 'Delinquent'
+        description: Number of accounts with Delinquent status.
+
+  # --------------------------------------------------------------------------
+  - name: transactions
+    description: Card/loan transactions from the last 90 days (2026-07-08 to 2026-10-06).
+    base_table:
+      database: RELATEIQ_DEMO
+      schema: OPS
+      table: TRANSACTIONS
+    primary_key:
+      name: txn_id
+    dimensions:
+      - name: txn_id
+        expr: txn_id
+        data_type: TEXT
+        unique: true
+      - name: account_id
+        expr: account_id
+        data_type: TEXT
+      - name: txn_date
+        expr: txn_date
+        data_type: DATE
+      - name: category
+        expr: category
+        data_type: TEXT
+        sample_values: ["Shopping", "Travel", "Bills", "Cash Withdrawal", "EMI Debit"]
+      - name: channel
+        expr: channel
+        data_type: TEXT
+        sample_values: ["App", "POS", "Online"]
+    measures:
+      - name: transaction_count
+        expr: txn_id
+        agg: COUNT
+        description: Number of transactions.
+      - name: total_spend
+        expr: amount
+        agg: SUM
+        description: Total transaction amount in INR.
+
+  # --------------------------------------------------------------------------
+  - name: repayments
+    description: EMI repayment schedule with actual payment dates and lateness.
+    base_table:
+      database: RELATEIQ_DEMO
+      schema: OPS
+      table: REPAYMENTS
+    primary_key:
+      name: repayment_id
+    dimensions:
+      - name: repayment_id
+        expr: repayment_id
+        data_type: TEXT
+        unique: true
+      - name: account_id
+        expr: account_id
+        data_type: TEXT
+      - name: due_date
+        expr: due_date
+        data_type: DATE
+      - name: paid_date
+        expr: paid_date
+        data_type: DATE
+        description: NULL when the installment is still unpaid.
+      - name: days_late
+        expr: days_late
+        data_type: NUMBER
+        description: Days past due (uses 2026-10-06 for unpaid).
+    measures:
+      - name: repayment_count
+        expr: repayment_id
+        agg: COUNT
+        description: Number of scheduled repayments.
+      - name: max_days_late
+        expr: days_late
+        agg: MAX
+        description: Worst lateness (current DPD driver).
+      - name: unpaid_count
+        expr: repayment_id
+        agg: COUNT
+        filters:
+          - name: is_unpaid
+            expr: paid_date IS NULL
+        description: Number of repayments still unpaid.
+      - name: total_amount_due
+        expr: amount_due
+        agg: SUM
+        description: Total scheduled amount in INR.
+
+relationships:
+  - name: accounts_to_customers
+    left_table: accounts
+    left_column: customer_id
+    right_table: customers
+    right_column: customer_id
+    relationship_type: many_to_one
+  - name: transactions_to_accounts
+    left_table: transactions
+    left_column: account_id
+    right_table: accounts
+    right_column: account_id
+    relationship_type: many_to_one
+  - name: repayments_to_accounts
+    left_table: repayments
+    left_column: account_id
+    right_table: accounts
+    right_column: account_id
+    relationship_type: many_to_one
+
+verified_queries:
+  - question: Which customers need attention today?
+    use_as_onboarding_question: true
+    verified_by: relateiq-demo
+    verified_at: 1728172800
+    sql: >
+      SELECT c.customer_id, c.name, c.segment, c.behavior_profile,
+             r.max_dpd, c.missed_payments_12m, c.utilization_pct
+      FROM CUSTOMERS c
+      LEFT JOIN (
+        SELECT a.customer_id, MAX(p.days_late) AS max_dpd
+        FROM ACCOUNTS a JOIN REPAYMENTS p ON p.account_id = a.account_id
+        GROUP BY a.customer_id
+      ) r ON r.customer_id = c.customer_id
+      WHERE COALESCE(r.max_dpd, 0) > 0
+         OR c.missed_payments_12m >= 1
+         OR c.utilization_pct >= 70
+      ORDER BY COALESCE(r.max_dpd, 0) DESC, c.missed_payments_12m DESC
+      LIMIT 20;
+
+  - question: Who are the top upsell candidates?
+    use_as_onboarding_question: true
+    verified_by: relateiq-demo
+    verified_at: 1728172800
+    sql: >
+      SELECT c.customer_id, c.name, c.segment, c.credit_score,
+             c.utilization_pct, c.tenure_months, c.products_held
+      FROM CUSTOMERS c
+      WHERE c.credit_score >= 750
+        AND c.utilization_pct < 30
+        AND c.missed_payments_12m = 0
+        AND c.tenure_months >= 24
+      ORDER BY c.credit_score DESC, c.utilization_pct ASC
+      LIMIT 10;
+
+  - question: Which disputes are open right now?
+    use_as_onboarding_question: false
+    verified_by: relateiq-demo
+    verified_at: 1728172800
+    sql: >
+      SELECT c.customer_id, c.name, c.segment, e.thread_md
+      FROM CUSTOMERS c
+      JOIN SUPPORT_EMAILS e ON e.customer_id = c.customer_id
+      WHERE e.thread_md ILIKE '%[SIGNAL: dispute-open]%'
+      ORDER BY c.customer_id;
+
+  - question: What is the delinquency breakdown by segment?
+    use_as_onboarding_question: false
+    verified_by: relateiq-demo
+    verified_at: 1728172800
+    sql: >
+      SELECT c.segment,
+             COUNT(DISTINCT c.customer_id) AS customers,
+             COUNT(DISTINCT CASE WHEN a.status = 'Delinquent' THEN a.account_id END) AS delinquent_accounts,
+             MAX(p.days_late) AS worst_dpd,
+             SUM(c.missed_payments_12m) AS total_missed_12m
+      FROM CUSTOMERS c
+      LEFT JOIN ACCOUNTS a ON a.customer_id = c.customer_id
+      LEFT JOIN REPAYMENTS p ON p.account_id = a.account_id
+      GROUP BY c.segment
+      ORDER BY delinquent_accounts DESC;
+
+  - question: Which high-value dormant customers are at churn risk?
+    use_as_onboarding_question: false
+    verified_by: relateiq-demo
+    verified_at: 1728172800
+    sql: >
+      SELECT c.customer_id, c.name, c.segment, c.lifetime_value,
+             MAX(t.txn_date) AS last_txn_date,
+             DATEDIFF('day', MAX(t.txn_date), DATE '2026-10-06') AS days_since_last_txn
+      FROM CUSTOMERS c
+      LEFT JOIN ACCOUNTS a ON a.customer_id = c.customer_id
+      LEFT JOIN TRANSACTIONS t ON t.account_id = a.account_id
+      WHERE c.lifetime_value >= 200000
+      GROUP BY c.customer_id, c.name, c.segment, c.lifetime_value
+      HAVING MAX(t.txn_date) IS NULL
+          OR DATEDIFF('day', MAX(t.txn_date), DATE '2026-10-06') > 90
+      ORDER BY c.lifetime_value DESC;

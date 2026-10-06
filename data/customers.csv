@@ -1,0 +1,41 @@
+customer_id,name,segment,region,tenure_months,credit_score,credit_limit,utilization_pct,missed_payments_12m,avg_days_late,products_held,lifetime_value,behavior_profile,contact_email,contact_phone
+CUST-001,Rohan Khanna,Salaried,Mumbai,60,688,1500000,92,3,14,2,450000,high-value,rohan.khanna@examplemail.com,+91 98754 24592
+CUST-002,Sneha Iyer,Salaried,Chennai,24,592,300000,88,5,41,2,95000,delinquent,sneha.iyer@examplemail.com,+91 98125 46048
+CUST-003,Amit Verma,Self-Employed,Delhi NCR,30,742,800000,41,0,0,2,210000,loyal,amit.verma@examplemail.com,+91 98350 39256
+CUST-004,Kavya Nair,Salaried,Bengaluru,48,810,1000000,15,0,0,2,320000,loyal,kavya.nair@examplemail.com,+91 98242 23434
+CUST-005,Vikram Rao,Self-Employed,Hyderabad,72,765,1200000,18,0,0,2,385000,dormant,vikram.rao@examplemail.com,+91 98792 81482
+CUST-006,Divya Menon,Salaried,Pune,4,682,250000,55,1,5,1,28000,new,divya.menon@examplemail.com,+91 98189 87397
+CUST-007,Aditya Kulkarni,Salaried,Mumbai,30,668,600000,78,2,14,2,240000,at-risk,aditya.kulkarni@examplemail.com,+91 98532 14165
+CUST-008,Pooja Deshmukh,Self-Employed,Delhi NCR,26,755,500000,34,0,0,2,180000,loyal,pooja.deshmukh@examplemail.com,+91 98130 22280
+CUST-009,Karan Malhotra,Salaried,Bengaluru,22,640,450000,85,2,17,2,130000,at-risk,karan.malhotra@examplemail.com,+91 98323 40495
+CUST-010,Ananya Reddy,Salaried,Chennai,10,690,350000,48,1,5,1,60000,new,ananya.reddy@examplemail.com,+91 98617 88907
+CUST-011,Suresh Pillai,Small Business,Hyderabad,60,790,900000,22,0,0,2,410000,loyal,suresh.pillai@examplemail.com,+91 98127 83563
+CUST-012,Sahil Khan,Small Business,Hyderabad,54,642,745000,91,1,25,2,108000,at-risk,sahil.khan@examplemail.com,+91 98411 47606
+CUST-013,Kunal Gupta,Salaried,Pune,49,777,975000,19,0,0,2,195000,dormant,kunal.gupta@examplemail.com,+91 98584 32241
+CUST-014,Aisha Chawla,Salaried,Pune,78,784,1002000,7,1,10,1,294000,dormant,aisha.chawla@examplemail.com,+91 98417 39444
+CUST-015,Kabir Dutta,Salaried,Mumbai,63,625,356000,85,1,9,2,190000,at-risk,kabir.dutta@examplemail.com,+91 98524 92544
+CUST-016,Ishaan Agarwal,Salaried,Hyderabad,12,699,309000,45,0,0,2,41000,new,ishaan.agarwal@examplemail.com,+91 98868 23970
+CUST-017,Vivaan Chopra,Salaried,Hyderabad,39,639,76000,87,5,17,2,80000,delinquent,vivaan.chopra@examplemail.com,+91 98236 70901
+CUST-018,Varun Yadav,Salaried,Pune,54,620,282000,89,4,36,2,147000,delinquent,varun.yadav@examplemail.com,+91 98556 30861
+CUST-019,Shreya Joshi,Salaried,Delhi NCR,72,807,768000,25,0,0,2,323000,loyal,shreya.joshi@examplemail.com,+91 98550 20155
+CUST-020,Ishita Bhatt,Salaried,Bengaluru,81,762,1470000,84,1,18,2,271000,high-value,ishita.bhatt@examplemail.com,+91 98810 30028
+CUST-021,Diya Oberoi,Salaried,Chennai,57,672,446000,89,2,12,2,152000,at-risk,diya.oberoi@examplemail.com,+91 98530 61049
+CUST-022,Tanvi Dutta,Small Business,Pune,14,748,600000,8,1,4,2,234000,loyal,tanvi.dutta@examplemail.com,+91 98955 64921
+CUST-023,Tanvi Bhatt,Self-Employed,Pune,11,727,165000,51,0,0,2,38000,new,tanvi.bhatt@examplemail.com,+91 98498 54057
+CUST-024,Kabir Mishra,Self-Employed,Chennai,63,716,752000,42,0,0,1,64000,loyal,kabir.mishra@examplemail.com,+91 98778 13552
+CUST-025,Vivaan Nambiar,Self-Employed,Delhi NCR,22,810,584000,19,1,11,2,76000,loyal,vivaan.nambiar@examplemail.com,+91 98565 52840
+CUST-026,Nikhil Rathore,Self-Employed,Chennai,55,735,888000,34,1,4,1,182000,loyal,nikhil.rathore@examplemail.com,+91 98867 80702
+CUST-027,Neha Agarwal,Small Business,Bengaluru,15,648,781000,59,2,14,2,234000,at-risk,neha.agarwal@examplemail.com,+91 98131 42411
+CUST-028,Dev Nambiar,Small Business,Pune,6,669,175000,28,0,0,1,72000,new,dev.nambiar@examplemail.com,+91 98323 70952
+CUST-029,Dev Gupta,Self-Employed,Delhi NCR,44,777,736000,15,1,8,2,135000,loyal,dev.gupta@examplemail.com,+91 98126 50888
+CUST-030,Ishita Rathore,Salaried,Hyderabad,60,725,179000,45,1,12,2,378000,loyal,ishita.rathore@examplemail.com,+91 98408 99687
+CUST-031,Rahul Oberoi,Self-Employed,Pune,27,800,143000,30,1,8,2,329000,loyal,rahul.oberoi@examplemail.com,+91 98618 94874
+CUST-032,Priya Nambiar,Salaried,Chennai,33,642,105000,83,4,32,1,109000,delinquent,priya.nambiar@examplemail.com,+91 98824 30052
+CUST-033,Varun Shukla,Salaried,Pune,39,654,745000,89,3,12,2,233000,at-risk,varun.shukla@examplemail.com,+91 98848 87656
+CUST-034,Zoya Nambiar,Salaried,Delhi NCR,46,806,190000,25,1,7,2,286000,loyal,zoya.nambiar@examplemail.com,+91 98724 97580
+CUST-035,Shreya Pandey,Salaried,Chennai,36,661,290000,86,3,7,2,85000,at-risk,shreya.pandey@examplemail.com,+91 98386 88139
+CUST-036,Rahul Shetty,Small Business,Pune,56,581,320000,76,5,24,2,37000,delinquent,rahul.shetty@examplemail.com,+91 98668 41499
+CUST-037,Tanvi Gupta,Salaried,Hyderabad,80,782,1739000,51,1,17,2,274000,high-value,tanvi.gupta@examplemail.com,+91 98349 50135
+CUST-038,Ishaan Bose,Salaried,Pune,12,717,230000,47,1,14,2,53000,new,ishaan.bose@examplemail.com,+91 98413 42951
+CUST-039,Kabir Khan,Salaried,Delhi NCR,6,690,112000,54,1,14,2,34000,new,kabir.khan@examplemail.com,+91 98383 87278
+CUST-040,Varun Chopra,Self-Employed,Mumbai,79,806,303000,26,0,0,2,169000,loyal,varun.chopra@examplemail.com,+91 98825 80010
