@@ -98,7 +98,7 @@ Every decision → timestamp, customer_id, action, attention, opportunity, reaso
 - 03_cortex_analyst_model.yaml: semantic model `relateiq_model`, per-table dims/measures, 4–5 verified_queries ("customers needing attention today", "top upsell candidates", "open disputes", "delinquency by segment").
 - 04_audit.sql: ACTIONS_AUDIT DDL (action_id autoincrement, decided_at default current_timestamp, customer_id, action, attention_score, opportunity_score, reason, message, decided_by default 'relateiq-agent') + append-only grant comments + sample INSERT.
 
-## CoCo skills (.coco/skills/*/)
+## CoCo skills (.cortex/skills/*/)
 - 360-profiler/SKILL.md — nightly profiling run: trigger, inputs, scoring model (copy weights), SQL/tools, outputs, errors, worked example.
 - signal-reader/SKILL.md — pre-action signal scan: transcripts + emails, signal vocabulary, DO NOT CONTACT on dispute-open, worked example (Amit Verma).
 - next-best-action-orchestrator/SKILL.md — branch logic with exact thresholds, drafting tone per branch, audit procedure, worked end-to-end example.

@@ -56,13 +56,13 @@ title_card(f"{OUT}/00_title.png",
            "Turn fragmented borrower signals into the right action, today.")
 
 term_card(f"{OUT}/card_input.png", "INPUT  ·  what RelateIQ ingests", [
-    ("$ ls data/ .coco/skills/", MUTED),
+    ("$ ls data/ .cortex/skills/", MUTED),
     ("customers.csv  accounts.csv  transactions.csv  repayments.csv", TEXT),
     ("call_transcripts.md  support_emails.md  audit_log.csv", TEXT),
     ("", TEXT),
-    (".coco/skills/360-profiler/SKILL.md", GREEN),
-    (".coco/skills/signal-reader/SKILL.md", GREEN),
-    (".coco/skills/next-best-action-orchestrator/SKILL.md", GREEN),
+    (".cortex/skills/360-profiler/SKILL.md", GREEN),
+    (".cortex/skills/signal-reader/SKILL.md", GREEN),
+    (".cortex/skills/next-best-action-orchestrator/SKILL.md", GREEN),
     ("", TEXT),
     ("40 synthetic customers  ·  fully offline  ·  no API keys", MUTED),
 ])

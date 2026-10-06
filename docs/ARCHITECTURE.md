@@ -3,7 +3,7 @@
 **Author:** Ratnesh Saxena (Solo) · Snowflake CoCo CLI Hackathon 2026 (GCC Edition), PS2
 **Problem:** PS2 - Customer 360 and Next Best Action Engine (digital lender / NBFC).
 
-RelateIQ is a Customer 360 + Next Best Action Engine for a Relationship Manager (Arjun Mehta) overseeing a 2,000-borrower retail portfolio. It fuses structured account data with unstructured conversation signals and produces one decision per customer: the next best action, the reason, and a ready-to-approve outreach draft. One agent, three modular CoCo skills, two operating modes.
+RelateIQ is a Customer 360 + Next Best Action Engine for a Relationship Manager (Arjun Mehta) overseeing a 2,000-borrower retail portfolio. It fuses structured account data with unstructured conversation signals and produces one decision per customer: the next best action, the reason, and a ready-to-approve outreach draft. One agent, three modular CoCo-compatible skills, two operating modes.
 
 ## System diagram
 
@@ -34,7 +34,7 @@ RelateIQ is a Customer 360 + Next Best Action Engine for a Relationship Manager 
   |  SKILL 1: 360-profiler                           |
   |  SKILL 2: signal-reader                          |
   |  SKILL 3: next-best-action-orchestrator           |
-  |  (.coco/skills/)                                 |
+  |  (.cortex/skills/)                                 |
   +------------------+-------------------------------+
                      |
                      v
@@ -55,7 +55,7 @@ RelateIQ is a Customer 360 + Next Best Action Engine for a Relationship Manager 
 
 ## Data flow: 360-profiler → signal-reader → next-best-action-orchestrator
 
-The three CoCo skills run in a fixed pipeline. Each skill is self-contained, documented in `.coco/skills/<name>/SKILL.md`, and runnable independently.
+The three CoCo-compatible skills run in a fixed pipeline. Each skill is self-contained, documented in `.cortex/skills/<name>/SKILL.md`, and runnable independently.
 
 | Stage | Skill | What happens |
 |---|---|---|
@@ -113,7 +113,7 @@ relateiq/
 │   ├── 02_load.py               # CSV/MD → Snowflake loader (env-var creds only)
 │   ├── 03_cortex_analyst_model.yaml  # relateiq_model semantic model + verified queries
 │   └── 04_audit.sql             # ACTIONS_AUDIT DDL (append-only) + sample INSERT
-├── .coco/skills/
+├── .cortex/skills/
 │   ├── 360-profiler/SKILL.md                # Skill 1 - nightly profiling run
 │   ├── signal-reader/SKILL.md               # Skill 2 - signal scan; DO NOT CONTACT on dispute-open
 │   └── next-best-action-orchestrator/SKILL.md  # Skill 3 - branches, drafting, audit

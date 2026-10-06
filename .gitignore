@@ -5,4 +5,8 @@ __pycache__/
 demo/vo/
 demo/shots/
 demo/segments/
+demo/segments_static/
+demo/*_old_cropped.mp4
+demo/assemble_*.py
+demo/render_*.py
 *.log

@@ -8,7 +8,9 @@ Arjun Mehta is a Relationship Manager at a digital lender with 2,000 retail borr
 
 ## The turn
 
-RelateIQ fuses both worlds into one decision per customer. Three modular CoCo skills run in sequence: the **360 Profiler** fuses accounts, transactions, repayment history, utilization, and tenure into an Attention Score (0-100) and an Opportunity Score (0-100), each with a human-readable reasoning trace; the **Signal Reader** extracts intent (`churn-risk`, `dispute-open`, `complaint`, `life-event`, `upsell-window`) from call transcripts and support emails; the **Next-Best-Action Orchestrator** picks one of six actions (dispute-hold, churn-intervention, collections-firm, collections-gentle, retention-offer, upsell), drafts the outreach in Arjun's voice, and writes every decision to an append-only audit table.
+RelateIQ fuses both worlds into one decision per customer. Three modular CoCo-compatible skills run in sequence: the **360 Profiler** fuses accounts, transactions, repayment history, utilization, and tenure into an Attention Score (0-100) and an Opportunity Score (0-100), each with a human-readable reasoning trace; the **Signal Reader** extracts intent (`churn-risk`, `dispute-open`, `complaint`, `life-event`, `upsell-window`) from call transcripts and support emails; the **Next-Best-Action Orchestrator** picks one of six actions (dispute-hold, churn-intervention, collections-firm, collections-gentle, retention-offer, upsell), drafts the outreach in Arjun's voice, and writes every decision to an append-only audit table.
+
+Built with AI agent orchestration and packaged as CoCo-compatible `SKILL.md` playbooks (Snowflake's `.cortex/skills/` convention). No live Snowflake/Cortex execution was performed; Live mode is implemented and falls back to Demo gracefully.
 
 ## The demo
 
@@ -16,11 +18,11 @@ A Streamlit app with three tabs: **Priority Feed** (40 customers ranked red-crit
 
 ## Projected impact
 
-- **Speed:** a full portfolio profiled, signal-scanned, and action-queued in seconds.
-- **Risk:** zero dunning of customers with open disputes.
+- **Speed:** a full portfolio profiled, signal-scanned, and action-queued in seconds (measured: 2,000 customers in 0.171s on synthetic data, see Benchmark).
+- **Risk:** dispute-hold is a hard rule, so customers with open disputes are expected to never be dunned (verified by the deterministic test suite on synthetic data).
 - **Revenue:** churn callbacks target high-LTV at-risk customers; upsell offers surface exactly when they qualify.
 - **Trust:** every score shows its trace, every decision its reason, every action its audit row.
-- **Projected outcomes:** delinquency (DSO) down through earlier, correctly-toned collections; upsell conversion up through perfectly timed offers.
+- **Expected outcomes (not measured on real portfolios):** delinquency (DSO) down through earlier, correctly-toned collections; upsell conversion up through perfectly timed offers.
 
 ## Setup
 
@@ -65,10 +67,13 @@ relateiq/
 │   ├── 02_load.py               # CSV/MD → Snowflake loader (env creds only)
 │   ├── 03_cortex_analyst_model.yaml  # relateiq_model semantic model + verified queries
 │   └── 04_audit.sql             # ACTIONS_AUDIT DDL (append-only) + sample INSERT
-├── .coco/skills/
+├── .cortex/skills/
 │   ├── 360-profiler/SKILL.md
 │   ├── signal-reader/SKILL.md
 │   └── next-best-action-orchestrator/SKILL.md
+├── tests/
+│   ├── test_engine.py           # 21-test deterministic suite (stdlib unittest)
+│   └── benchmark_2000.py        # 2,000-customer synthetic benchmark
 ├── data/                        # Demo-mode source of truth (synthetic)
 │   ├── customers.csv            # 40 customers
 │   ├── accounts.csv             # ~70 accounts
@@ -90,9 +95,51 @@ relateiq/
 
 | Criterion | Weight | How RelateIQ delivers |
 |---|---|---|
-| Technical Execution | 40% | Three modular, documented CoCo skills in `.coco/skills/`; a deterministic rules engine (`app/engine.py`) with weighted, explainable scoring and fixed-order decision branches; dual-mode data layer (local CSVs / Snowflake) behind one scoring contract; graceful Live-mode fallback; append-only audit in both modes; idempotent SQL and a Cortex Analyst semantic model with verified queries. |
+| Technical Execution | 40% | Three modular, documented CoCo-compatible skills in `.cortex/skills/`; a deterministic rules engine (`app/engine.py`) with weighted, explainable scoring and fixed-order decision branches; dual-mode data layer (local CSVs / Snowflake) behind one scoring contract; graceful Live-mode fallback; append-only audit in both modes; idempotent SQL and a Cortex Analyst semantic model with verified queries. |
 | Real-World Relevance | 30% | Built for a real RM workflow at a digital lender: the daily "who needs attention today and what exactly to do" question. Anchor cases mirror real portfolio events (double-charge disputes, dormant high-LTV churners, delinquency ladders, pre-approved top-ups). The dispute-hold branch directly prevents revenue-destroying dunning; every draft stays human-approved. |
 | Solution Completeness | 30% | End-to-end prototype: synthetic data → scoring → signal extraction → decision branches → drafted outreach → human approval → audit trail → Snowflake deployment path. Streamlit UI covers rank, diagnose, and act. Docs cover architecture, a 90-second demo script, a 3-5 minute video script, and a 6-slide deck outline. Everything runs from two pip installs. |
+
+## Test Results
+
+Deterministic test suite: `tests/test_engine.py` (stdlib `unittest` only, no new dependencies).
+
+```
+Ran 21 tests in 0.005s
+
+OK
+```
+
+Coverage:
+- **Decision branches:** dispute-open + churn-risk -> dispute-hold (dispute always wins); dispute-open + severe delinquency -> dispute-hold; churn-risk alone (high LTV) -> churn-intervention (human callback); DPD 45 -> collections-firm; 4+ missed payments -> collections-firm; DPD 10 -> collections-gentle; complaint + high LTV + zero DPD -> retention-offer; eligible profile -> upsell; healthy profile -> monitor.
+- **Determinism:** same customer scored twice -> identical scores, branch, trace, reason, and draft; `demo_fixtures()` pipeline byte-identical across runs.
+- **Audit:** one decision -> exactly one audit row with matching fields; N decisions -> N rows, append-only, in order; audit row mirrors the `decide()` output.
+- **Signal parsing:** missing file, empty file, header-less file, unknown `[SIGNAL:]` tags, and unattributed sections all return empty results without crashing; structured scoring works regardless.
+
+Run it: `python3 -m unittest discover -s tests`
+
+## Benchmark
+
+2,000-customer synthetic benchmark: `python3 tests/benchmark_2000.py`. Full methodology and numbers in [docs/benchmark_results.md](docs/benchmark_results.md). **Measured on synthetic data, not real-world results.**
+
+| Metric | Measured |
+|---|---|
+| Customers / accounts / transactions / repayments | 2000 / 3430 / 42349 / 17613 |
+| Daily priority queue (score + decide, all customers) | 0.171s |
+| Flagged for attention (Attention >= 60) | 4.85% |
+| Conflicting signals (resolved by deterministic precedence) | 0.65% |
+| Protected by dispute-hold | 4.90% |
+| Decisions with contributing factors, rule IDs, and decision trace | 100% |
+| Audit records written (one per decision) | 2000 |
+
+Action distribution: monitor 47.8%, upsell 18.9%, collections-firm 13.3%, collections-gentle 10.3%, dispute-hold 4.9%, retention-offer 2.6%, churn-intervention 2.4%. Distribution reflects the synthetic signal mix, not a real lender portfolio. Attention score and contact eligibility are independent: dispute-hold suppresses outreach regardless of attention score.
+
+## Compliance & Guardrails
+
+- The engine **recommends** actions; it does not make credit decisions. No credit limits, rates, or approvals are decided by the model.
+- Eligibility inputs (tenure, credit score, utilization, missed payments, lifetime value) are sourced from existing policy data, not invented by an LLM.
+- **Dispute-open hard-blocks all contact.** The dispute-hold branch is evaluated first and always wins, no matter the scores.
+- Human approval is required before any outbound message: drafts sit in the Action Queue until Arjun approves; approval writes the audit row.
+- The audit log is append-only and preserves the decision rationale (action, scores, reason) for every decision. Corrections are new rows, never edits.
 
 ## Notes
 

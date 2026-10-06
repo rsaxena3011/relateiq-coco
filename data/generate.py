@@ -151,7 +151,44 @@ def make_contact(name, used_emails, used_phones):
     return email, phone
 
 
-def build_customers():
+def _unique_name(used_names):
+    """Name pool holds 500 unique combos; beyond that, numbered variants.
+
+    Keeps the original pop-from-shuffled-pool draw order for the first 500
+    so the default 40-customer run stays byte-identical.
+    """
+    base = [f"{f} {l}" for f in FIRST_M + FIRST_F for l in LAST
+            if f"{f} {l}" not in used_names]
+    if base:
+        return base[rng.randrange(len(base))]
+    name = f"{pick(FIRST_M + FIRST_F)} {pick(LAST)}"
+    k = 2
+    # NOTE: at this point every base combo is taken (base was empty), so only
+    # the numbered variant needs checking. Do NOT add `name in used_names`
+    # to the condition: it is always True here and would loop forever.
+    while f"{name} {k}" in used_names:
+        k += 1
+    return f"{name} {k}"
+
+
+def _gen_profile_counts(n_generated):
+    """Profile mix scaled from the 29-customer reference mix."""
+    weights = [("loyal", 10), ("at-risk", 6), ("delinquent", 4),
+               ("new", 5), ("dormant", 2), ("high-value", 2)]
+    total_w = sum(w for _, w in weights)
+    counts, remaining = [], n_generated
+    for j, (p, w) in enumerate(weights):
+        if j == len(weights) - 1:
+            k = remaining
+        else:
+            k = n_generated * w // total_w
+            remaining -= k
+        counts.extend([p] * k)
+    assert len(counts) == n_generated
+    return counts
+
+
+def build_customers(n_generated=29):
     customers = []
     used_names, used_emails, used_phones = set(), set(), set()
 
@@ -179,10 +216,8 @@ def build_customers():
             s["score"], s["limit"], s["util"], s["ltv"], s["profile"],
             s["n_acc"], s["late_plan"], s["signal"])
 
-    # 12-40: generated customers.
-    gen_profiles = (["loyal"] * 10 + ["at-risk"] * 6 + ["delinquent"] * 4 +
-                    ["new"] * 5 + ["dormant"] * 2 + ["high-value"] * 2)
-    assert len(gen_profiles) == 29
+    # 12+: generated customers.
+    gen_profiles = _gen_profile_counts(n_generated)
     rng.shuffle(gen_profiles)
     name_pool = []
     for f in FIRST_M + FIRST_F:
@@ -192,7 +227,7 @@ def build_customers():
     rng.shuffle(name_pool)
     for i, profile in enumerate(gen_profiles, start=12):
         p = PROFILE_PARAMS[profile]
-        name = name_pool.pop()
+        name = name_pool.pop() if name_pool else _unique_name(used_names)
         tenure = rint(*p["tenure"])
         add(f"CUST-{i:03d}", name,
             wpick([("Salaried", 55), ("Self-Employed", 25), ("Small Business", 20)]),
@@ -200,7 +235,7 @@ def build_customers():
             rint(*p["util"]), rint(*p["ltv"]) // 1000 * 1000, profile,
             1 + (rng.random() < 0.55) + (rng.random() < 0.18),
             late_plan="auto")
-    assert len(customers) == 40
+    assert len(customers) == 11 + n_generated
     return customers
 
 

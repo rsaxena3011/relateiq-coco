@@ -26,11 +26,11 @@ if live credentials are absent or the connection fails. Snowflake SQL lives in `
      (scores)       (signals)              (decision + draft + audit)
 ```
 
-1. **360-profiler** (`.coco/skills/360-profiler/SKILL.md`) — nightly or ad-hoc; produces
+1. **360-profiler** (`.cortex/skills/360-profiler/SKILL.md`) — nightly or ad-hoc; produces
    Attention (0–100) + Opportunity (0–100) per customer via `app/engine.py :: score_customer`.
-2. **signal-reader** (`.coco/skills/signal-reader/SKILL.md`) — pre-action scan of
+2. **signal-reader** (`.cortex/skills/signal-reader/SKILL.md`) — pre-action scan of
    `data/call_transcripts.md` + `data/support_emails.md`; produces signals list + CLEAR/HOLD clearance.
-3. **next-best-action-orchestrator** (`.coco/skills/next-best-action-orchestrator/SKILL.md`) —
+3. **next-best-action-orchestrator** (`.cortex/skills/next-best-action-orchestrator/SKILL.md`) —
    evaluates decision branches in order, drafts the message, writes one append-only audit row.
 
 The orchestrator must never run without fresh profiler scores AND a fresh signal scan.
@@ -72,9 +72,9 @@ If either is missing, stop and report which one — do not guess.
 ## Repo map
 
 ```
-.coco/skills/360-profiler/SKILL.md
-.coco/skills/signal-reader/SKILL.md
-.coco/skills/next-best-action-orchestrator/SKILL.md
+.cortex/skills/360-profiler/SKILL.md
+.cortex/skills/signal-reader/SKILL.md
+.cortex/skills/next-best-action-orchestrator/SKILL.md
 AGENTS.md                        ← this file
 SPEC.md                          ← full build spec (source of truth)
 app/engine.py                    ← score_customer + decide (standalone-importable)

@@ -64,7 +64,7 @@ Exact content per slide. Visual guidance in brackets is for the presenter, not t
 
 **Connection:** profiler output feeds the orchestrator's branch thresholds; signal-reader output gates the branches (dispute-open forces dispute-hold with zero outreach). Every decision appends to the audit table.
 
-**Skill contracts live in:** `.coco/skills/360-profiler/SKILL.md`, `.coco/skills/signal-reader/SKILL.md`, `.coco/skills/next-best-action-orchestrator/SKILL.md`.
+**Skill contracts live in:** `.cortex/skills/360-profiler/SKILL.md`, `.cortex/skills/signal-reader/SKILL.md`, `.cortex/skills/next-best-action-orchestrator/SKILL.md`.
 
 [Visual: three connected boxes with arrows: 1 → 2 → 3, plus a side arrow from 3 down to an "Audit" cylinder.]
 

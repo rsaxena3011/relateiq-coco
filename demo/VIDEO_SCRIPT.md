@@ -33,7 +33,7 @@
 
 ### Shot 4 (1:00–1:20) - Skill 1: 360 Profiler
 
-**On-screen action:** Open `.coco/skills/360-profiler/SKILL.md` briefly, then switch to the app, Priority Feed tab. The ranked table renders: Sneha Iyer at the top (red), Kavya Nair at the bottom (green).
+**On-screen action:** Open `.cortex/skills/360-profiler/SKILL.md` briefly, then switch to the app, Priority Feed tab. The ranked table renders: Sneha Iyer at the top (red), Kavya Nair at the bottom (green).
 
 **Narration:**
 > Skill one is the 360 Profiler. It fuses accounts, transactions, and repayment history into two numbers per customer: an Attention Score from zero to a hundred, and an Opportunity Score. Forty customers ranked in seconds, red critical down to green healthy.
@@ -47,14 +47,14 @@
 
 ### Shot 6 (1:40–2:05) - Skill 2: Signal Reader
 
-**On-screen action:** Open `.coco/skills/signal-reader/SKILL.md` briefly. Switch to Customer 360 tab, select Amit Verma. Show his signal chips: `dispute-open`. Show the recommended action badge: `dispute-hold`.
+**On-screen action:** Open `.cortex/skills/signal-reader/SKILL.md` briefly. Switch to Customer 360 tab, select Amit Verma. Show his signal chips: `dispute-open`. Show the recommended action badge: `dispute-hold`.
 
 **Narration:**
 > Skill two is the Signal Reader. It scans every transcript and email for intent: churn risk, disputes, complaints, life events, upsell windows. Amit's double-charge became a dispute-open signal, and the engine did the only safe thing: dispute-hold. No outreach. Internal review. One dunning message to a disputed customer can end the relationship; this skill stops it.
 
 ### Shot 7 (2:05–2:50) - Skill 3: Next-Best-Action Orchestrator
 
-**On-screen action:** Open `.coco/skills/next-best-action-orchestrator/SKILL.md` briefly, then show the Action Queue tab. Scroll through the six decision branches in action: Amit Verma → dispute-hold; Vikram Rao → churn-intervention (human callback brief); Sneha Iyer → collections-firm; Divya Menon → collections-gentle; Rohan Khanna → retention-offer; Kavya Nair → upsell (pre-approved top-up). Open one draft message (Kavya's upsell or Sneha's firm nudge) to show the filled fields.
+**On-screen action:** Open `.cortex/skills/next-best-action-orchestrator/SKILL.md` briefly, then show the Action Queue tab. Scroll through the six decision branches in action: Amit Verma → dispute-hold; Vikram Rao → churn-intervention (human callback brief); Sneha Iyer → collections-firm; Divya Menon → collections-gentle; Rohan Khanna → retention-offer; Kavya Nair → upsell (pre-approved top-up). Open one draft message (Kavya's upsell or Sneha's firm nudge) to show the filled fields.
 
 **Narration:**
 > Skill three is the orchestrator. It evaluates six decision branches in a fixed order: dispute-hold, churn intervention, collections firm, collections gentle, retention offer, upsell. Vikram Rao, dormant ninety days with high lifetime value, gets a human callback brief. Kavya Nair, loyalty and a spotless record, gets a pre-approved top-up with the amount filled in. Each branch drafts the outreach in Arjun's voice, ready to review.

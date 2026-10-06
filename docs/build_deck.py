@@ -63,9 +63,9 @@ slides.append({
     "kicker": "04  /  COCO CLI SKILLS",
     "title": "Three Modular Skills, One Pipeline",
     "bullets": [
-        "1. 360-profiler  \u2014  in: accounts, transactions, repayments, credit, tenure  \u2014  out: Attention + Opportunity scores + reasoning trace  (.coco/skills/360-profiler/SKILL.md)",
-        "2. signal-reader  \u2014  in: call_transcripts.md, support_emails.md  \u2014  out: intent signal + CLEAR/HOLD clearance  (.coco/skills/signal-reader/SKILL.md)",
-        "3. next-best-action-orchestrator  \u2014  in: scores + signals + DPD  \u2014  out: action + reason + drafted outreach + audit row  (.coco/skills/next-best-action-orchestrator/SKILL.md)",
+        "1. 360-profiler  \u2014  in: accounts, transactions, repayments, credit, tenure  \u2014  out: Attention + Opportunity scores + reasoning trace  (.cortex/skills/360-profiler/SKILL.md)",
+        "2. signal-reader  \u2014  in: call_transcripts.md, support_emails.md  \u2014  out: intent signal + CLEAR/HOLD clearance  (.cortex/skills/signal-reader/SKILL.md)",
+        "3. next-best-action-orchestrator  \u2014  in: scores + signals + DPD  \u2014  out: action + reason + drafted outreach + audit row  (.cortex/skills/next-best-action-orchestrator/SKILL.md)",
         "Connection: profiler output feeds orchestrator branch thresholds; signal-reader gates branches (dispute-open forces dispute-hold with zero outreach).",
         "Every decision appends exactly one row to the audit table \u2014 never UPDATE, never DELETE.",
     ],
